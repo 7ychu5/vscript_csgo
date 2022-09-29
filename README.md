@@ -1,0 +1,1 @@
+# vscript_csgo
