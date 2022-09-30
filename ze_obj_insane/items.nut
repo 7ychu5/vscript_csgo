@@ -26,9 +26,9 @@ function heal_display() {
 }
 
 function CastHeal() {
-    if (heal_count < heal_count_max) {
-        heal_count++;
-        if (activator == heal_owner && heal_owner.IsValid() && heal_owner.GetHealth() > 0) {
+    if (activator == heal_owner && heal_owner.IsValid() && heal_owner.GetHealth() > 0) {
+        if (heal_count < heal_count_max) {
+            heal_count++;
             EntFire("item_heal_trigger", "Enable", "", 0.00, null);
             EntFire("item_heal_trigger", "Disable", "", 0.50, null);
         }
