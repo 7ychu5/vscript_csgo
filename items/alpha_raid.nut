@@ -161,4 +161,35 @@ function weird_look() {
         EntFireByHandle(text0, "Display", " ", 0.00, null, null);
         EntFireByHandle(text0, "kill", " ", 3.00, null, null);
         EntFire("tick", "FireUser1", " ", 3.0, null);
+
+        if(Entities.FindByName(null, "music")!=null)
+        {
+            music <- Entities.FindByName(null, "music");
+        }
+        else{
+            music <- Entities.CreateByClassname("ambient_generic");
+        }
+
+        music.__KeyValueFromString("targetname", "music");
+        music.__KeyValueFromInt("spawnflags", 49);
+
+        local n = RandomInt(1, 4);
+        switch (n) {
+            case 1:
+                EntFireByHandle(music, "AddOutput", "message cheer/1.mp3", 0.0, null, null);EntFireByHandle(music, "PlaySound", " ", 0.0, null, null);break;
+            case 2:
+                EntFireByHandle(music, "AddOutput", "message cheer/2.mp3", 0.0, null, null);EntFireByHandle(music, "PlaySound", " ", 0.0, null, null);break;
+            case 3:
+                EntFireByHandle(music, "AddOutput", "message cheer/4.mp3", 0.0, null, null);EntFireByHandle(music, "PlaySound", " ", 0.0, null, null);break;
+            case 4:
+                EntFireByHandle(music, "AddOutput", "message cheer/5.mp3", 0.0, null, null);EntFireByHandle(music, "PlaySound", " ", 0.0, null, null);break;
+            default:
+                printl(" ");break;
+        }
+}
+function Precache() {
+    self.PrecacheScriptSound("cheer/1.mp3");
+    self.PrecacheScriptSound("cheer/2.mp3");
+    self.PrecacheScriptSound("cheer/4.mp3");
+    self.PrecacheScriptSound("cheer/5.mp3");
 }

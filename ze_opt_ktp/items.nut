@@ -102,14 +102,11 @@ function PickUp_inflatable() {
 function Use_inflatable() {
     if(activator == inflatable_OWNER && inflatable_OWNER.IsValid() && inflatable_OWNER != null)
     {
-        //EntFireByHandle(handle target, string action, string value, float delay, handle activator, handle caller)
         local n,m=5;
         for(n=1;n<=5;n+=0.01)
         {
             EntFireByHandle(inflatable_OWNER, "AddOutput", "modelscale "+n, n, null, null)
             EntFireByHandle(inflatable_OWNER, "AddOutput", "modelscale "+m, 10+n, null, null)
-            //EntFire("item_zm_inflatable_model", "AddOutput", "modelscale "+n, n, null);
-            //EntFire("item_zm_inflatable_model", "AddOutput", "modelscale "+m, 25+n, null);
             m-=0.01;
         }
     }
