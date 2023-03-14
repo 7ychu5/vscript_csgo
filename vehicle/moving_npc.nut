@@ -37,15 +37,10 @@
 //===============================================================\\
 //----------[VARIABLES]----------\\
 	TICKRATE 		<- 	0.10;	//the rate (seconds) in which the logic should tick
-	TARGET_DISTANCE <- 	280;	//the distance to search for targets
-	RETARGET_TIME 	<- 	2.50;	//the amount of time to run before picking a new target
+	TARGET_DISTANCE <- 	5000;	//the distance to search for targets
+	RETARGET_TIME 	<- 	7.50;	//the amount of time to run before picking a new target
 	SPEED_FORWARD 	<- 	1.00;	//forward speed modifier 	(0.5=half, 2.0=double, etc)
-	SPEED_TURNING 	<- 	3.00;	//side speed modifier 	 	(0.5=half, 2.0=double, etc)
-//===============================================================\\
-//----------[VARIABLES]----------\\
-	SCRIPT_ADAPTER <- "7ychu5";
-    SCRIPT_MAP <- "ze_obj_insane_v1";
-    SCRIPT_TIME <- "2022年8月18日21:24:36";
+	SPEED_TURNING 	<- 	1.00;	//side speed modifier 	 	(0.5=half, 2.0=double, etc)
 //===============================================================\\
 //----------[THE MAIN SCRIPT]----------\\
 target <- null;
@@ -85,20 +80,6 @@ function Tick()
 	local tdistz = (target.GetOrigin().z-self.GetOrigin().z);
 	EntFireByHandle(tf,"AddOutput","force "+(3000*SPEED_FORWARD).tostring(),0.00,null,null);
 	EntFireByHandle(ts,"AddOutput","force "+((3*SPEED_TURNING)*angdif).tostring(),0.00,null,null);
-
-	local npc_model = Entities.FindByNameNearest("npc_model*", self.GetOrigin(), 64);
-	local npc_explosion = Entities.FindByNameNearest("npc_explosion*", self.GetOrigin(), 64);
-	local h=null;
-	if(null!=(h=Entities.FindInSphere(h,npc_model.GetOrigin(),40)))
-	{
-		if(h.GetClassname()=="player"&&h.GetTeam()==3&&h.GetHealth()>0){
-			Stop();
-			EntFireByHandle(npc_model, "SetAnimation","attack",0.0,null,null);
-			EntFireByHandle(npc_explosion, "Explode"," ",1.0,null,null);
-			EntFireByHandle(npc_model, "Kill"," ",1.0,null,null);
-		}
-
-	}
 }
 function SearchTarget()
 {
@@ -118,10 +99,6 @@ function SearchTarget()
 	}
 	if(candidates.len()==0)return;
 	target = candidates[RandomInt(0,candidates.len()-1)];
-
-	local npc_model = Entities.FindByNameNearest("npc_model*", self.GetOrigin(), 64);
-	EntFireByHandle(npc_model, "SetAnimation","sleeptostand3",0.0,null,null);
-	EntFireByHandle(npc_model, "SetAnimation","run",1.0,null,null);
 }
 function GetTargetYaw(start,target)
 {
@@ -136,15 +113,3 @@ function GetTargetYaw(start,target)
 function SetThruster(forward){if(forward)tf=caller;else ts=caller;}
 function GetDistance(v1,v2){return sqrt((v1.x-v2.x)*(v1.x-v2.x)+(v1.y-v2.y)*(v1.y-v2.y)+(v1.z-v2.z)*(v1.z-v2.z));}
 //===============================================================\\
-function spawn_houndeye(){
-    local spawner = Entities.CreateByClassname("env_entity_maker");
-    for(local j=1; j<=13; j++)//遍历target
-    {
-        if(RandomInt(1, 4)<=3)//生成的概率
-        {
-            spawner.__KeyValueFromString("EntityTemplate", "houndeye_template");
-            spawner.SpawnEntityAtNamedEntityOrigin("houndeye_target_"+j);
-        }
-    }
-    EntFireByHandle(spawner, "kill", " ", 0.0, null, null)
-}

@@ -56,6 +56,24 @@ function watercast()
 }
 
 //////////////////////////////
+////////////earth/////////////
+//////////////////////////////
+earth <- null;
+function earth_Owner()
+{
+    earth = activator;
+    ScriptPrintMessageChatAll("人类墙已获取");
+}
+
+function earthcast()
+{
+	if(activator == earth && earth.IsValid() && earth != null)
+	{
+		EntFireByHandle(self, "FireUser1", "", 0.00, earth, earth);
+	}
+}
+
+//////////////////////////////
 /////////////heal/////////////
 //////////////////////////////
 heal <- null;

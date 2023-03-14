@@ -4,7 +4,7 @@ SCRIPT_TIME <- "2022年8月30日01:36:31";
 
 heal_owner <- null;
 heal_count <- 0;
-heal_count_max <- 5;
+heal_count_max <- 4;
 heal_item <- Entities.FindByName(null, "item_heal_gun")
 
 function pick_heal() {
@@ -26,9 +26,9 @@ function heal_display() {
 }
 
 function CastHeal() {
-    if (activator == heal_owner && heal_owner.IsValid() && heal_owner.GetHealth() > 0) {
-        if (heal_count < heal_count_max) {
-            heal_count++;
+    if (heal_count < heal_count_max) {
+        heal_count++;
+        if (activator == heal_owner && heal_owner.IsValid() && heal_owner.GetHealth() > 0) {
             EntFire("item_heal_trigger", "Enable", "", 0.00, null);
             EntFire("item_heal_trigger", "Disable", "", 0.50, null);
         }

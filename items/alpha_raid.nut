@@ -36,7 +36,7 @@ function Use_Alpharaid() {
         local target_candidates = [];
         for(local h;h=Entities.FindByClassnameWithin(h,"cs_bot",Alpharaid_gun.GetOrigin(),1024);)
         {
-            if(h==Alpharaid_OWNER||h==null||!h.IsValid()||h.GetTeam()!=3||h.GetHealth()<=0) continue;//h==Alpharaid_OWNER||
+            if(h==Alpharaid_OWNER||h==null||!h.IsValid()||h.GetTeam()!=3||h.GetHealth()<=0) continue;
             target_candidates.push(h);
         }
         if(target_candidates.len()<=0)

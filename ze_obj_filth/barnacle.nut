@@ -6,7 +6,7 @@ barnacle_HP <- 12;
 victim <- null;
 function spawn_barnacle(){
     local spawner = Entities.CreateByClassname("env_entity_maker");
-    for(local j=1; j<=20; j++)
+    for(local j=1; j<=10; j++)
     {
         if(RandomInt(1, 4)<=3)
         {

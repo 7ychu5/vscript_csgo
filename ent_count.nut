@@ -3,6 +3,7 @@ count_relay <- Entities.CreateByClassname("logic_relay");
 count_relay.__KeyValueFromString("targetname", "count_relay");
 count_text.__KeyValueFromFloat("x", 0.55);
 count_text.__KeyValueFromFloat("y", 0);
+count_text.__KeyValueFromString("channel", "0");
 count_text.__KeyValueFromString("targetname", "count_text");
 count_text.__KeyValueFromString("color", "0 255 255");
 count_text.__KeyValueFromString("spawnflags","1");

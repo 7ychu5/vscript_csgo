@@ -16,7 +16,7 @@ function tick()
     {
         if(ent.GetVelocity()==0) EntFireByHandle(ent, "break", " ", 0.0, null, null);
     }
-    printl("sweep");
+    //printl("sweep");
     EntFire("logic_script", "RunScriptCode", "tick()", 1.0, null);
 }
 
@@ -28,7 +28,7 @@ if(ultrakill_gameui.ValidateScriptScope())
         //printl(ultrakill_guy);
         EntFire("ultrakill_coin_push_up", "Enable", " ", 0.0, null);
         EntFire("ultrakill_maker", "ForceSpawn", " ", 0.02, null);
-        EntFire("ultrakill_coin_push_up", "Disable", " ", 0.1, null);
+        EntFire("ultrakill_coin_push_up", "Disable", " ", 0.02, null);
     }
     scope["PressedMoveLeft"] <- function ()
     {

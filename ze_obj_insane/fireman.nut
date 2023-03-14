@@ -2,25 +2,30 @@ SCRIPT_OWNER <- "7ychu5";
 SCRIPT_MAP <- "ze_obj_insane_v1";
 SCRIPT_TIME <- "2022年9月2日22:31:10";
 
-fireman <- null;
-fireman_item <- Entities.FindByName(null, "item_fireman_gun");
-fireman_pos1 <- fireman_item.GetOrigin();
+::fireman <- null;
+::fireman_item <- Entities.FindByName(null, "item_fireman_gun");
 
 function become_fireman() {
-    fireman = activator;
+    ::fireman = activator;
 }
 
 function IsFireman1() {
-    printl("1_1");
-    if(fireman_item.GetOwner() == activator && fireman.GetTeam().tostring() == "3")
+    if(::fireman_item.GetOwner() == activator && ::fireman.GetTeam().tostring() == "3")
     {
-        printl("1_2");
-        EntFire("fireman_trigger1", "FireUser1", " ", 0.0, fireman);
-
+        EntFire("fireman_trigger1", "FireUser1", "0.0", 0.0, fireman);
     }
 }
 
-function UseFireman() {
-    local fireman_pos2 = fireman_item.GetOrigin();
-    DebugDrawLine(fireman_pos1, fireman_pos2, 255, 80, 80, false, 5.0);
+function IsFireman2() {
+    if(::fireman_item.GetOwner() == activator && ::fireman.GetTeam().tostring() == "3")
+    {
+        EntFire("fireman_trigger2", "FireUser1", "0.0", 0.0, fireman);
+    }
+}
+
+function IsFireman3() {
+    if(::fireman_item.GetOwner() == activator && ::fireman.GetTeam().tostring() == "3")
+    {
+        EntFire("fireman_trigger3", "FireUser1", "0.0", 0.0, fireman);
+    }
 }
