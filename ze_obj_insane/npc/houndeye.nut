@@ -36,16 +36,16 @@
 //	(NOTE: You can remove the prefab phys_keepupright, though it's not recommended as it might fall over)
 //===============================================================\\
 //----------[VARIABLES]----------\\
-	TICKRATE 		<- 	0.10;	//the rate (seconds) in which the logic should tick
-	TARGET_DISTANCE <- 	280;	//the distance to search for targets
-	RETARGET_TIME 	<- 	2.50;	//the amount of time to run before picking a new target
-	SPEED_FORWARD 	<- 	1.00;	//forward speed modifier 	(0.5=half, 2.0=double, etc)
-	SPEED_TURNING 	<- 	3.00;	//side speed modifier 	 	(0.5=half, 2.0=double, etc)
+TICKRATE 		<- 	0.10;	//the rate (seconds) in which the logic should tick
+TARGET_DISTANCE <- 	500;	//the distance to search for targets
+RETARGET_TIME 	<- 	7.50;	//the amount of time to run before picking a new target
+SPEED_FORWARD 	<- 	0.80;	//forward speed modifier 	(0.5=half, 2.0=double, etc)
+SPEED_TURNING 	<- 	3.00;	//side speed modifier 	 	(0.5=half, 2.0=double, etc)
 //===============================================================\\
 //----------[VARIABLES]----------\\
-	SCRIPT_ADAPTER <- "7ychu5";
-    SCRIPT_MAP <- "ze_obj_insane_v1";
-    SCRIPT_TIME <- "2022年8月18日21:24:36";
+SCRIPT_ADAPTER <- "7ychu5";
+SCRIPT_MAP <- "ze_obj_insane_v1";
+SCRIPT_TIME <- "2022年8月18日21:24:36";
 //===============================================================\\
 //----------[THE MAIN SCRIPT]----------\\
 target <- null;
@@ -57,94 +57,94 @@ function Start(){if(!ticking){ticking = true;Tick();}}
 function Stop(){if(ticking){ticking = false;}}
 function Tick()
 {
-	if(ticking)
-		EntFireByHandle(self,"RunScriptCode","Tick();",TICKRATE,null,null);
-	else
-	{
-		EntFireByHandle(tf,"Deactivate","",0.00,null,null);
-		EntFireByHandle(ts,"Deactivate","",0.00,null,null);
-		return;
-	}
+if(ticking)
+	EntFireByHandle(self,"RunScriptCode","Tick();",TICKRATE,null,null);
+else
+{
 	EntFireByHandle(tf,"Deactivate","",0.00,null,null);
 	EntFireByHandle(ts,"Deactivate","",0.00,null,null);
-	if(target==null||!target.IsValid()||target.GetHealth()<=0.00||target.GetTeam()!=3||ttime>=RETARGET_TIME)
-		return SearchTarget();
-	ttime+=TICKRATE;
-	EntFireByHandle(tf,"Activate","",0.02,null,null);
-	EntFireByHandle(ts,"Activate","",0.02,null,null);
-	local sa = self.GetAngles().y;
-	local ta = GetTargetYaw(self.GetOrigin(),target.GetOrigin());
-	local ang = abs((sa-ta+360)%360);
-	if(ang>=180)EntFireByHandle(ts,"AddOutput","angles 0 270 0",0.00,null,null);
-	else EntFireByHandle(ts,"AddOutput","angles 0 90 0",0.00,null,null);
-	local angdif = (sa-ta-180);
-	while(angdif>360){angdif-=180;}
-	while(angdif< -180){angdif+=360;}
-	angdif=abs(angdif);
-	local tdist = GetDistance(self.GetOrigin(),target.GetOrigin());
-	local tdistz = (target.GetOrigin().z-self.GetOrigin().z);
-	EntFireByHandle(tf,"AddOutput","force "+(3000*SPEED_FORWARD).tostring(),0.00,null,null);
-	EntFireByHandle(ts,"AddOutput","force "+((3*SPEED_TURNING)*angdif).tostring(),0.00,null,null);
+	return;
+}
+EntFireByHandle(tf,"Deactivate","",0.00,null,null);
+EntFireByHandle(ts,"Deactivate","",0.00,null,null);
+if(target==null||!target.IsValid()||target.GetHealth()<=0.00||target.GetTeam()!=3||ttime>=RETARGET_TIME)
+	return SearchTarget();
+ttime+=TICKRATE;
+EntFireByHandle(tf,"Activate","",0.02,null,null);
+EntFireByHandle(ts,"Activate","",0.02,null,null);
+local sa = self.GetAngles().y;
+local ta = GetTargetYaw(self.GetOrigin(),target.GetOrigin());
+local ang = abs((sa-ta+360)%360);
+if(ang>=180)EntFireByHandle(ts,"AddOutput","angles 0 270 0",0.00,null,null);
+else EntFireByHandle(ts,"AddOutput","angles 0 90 0",0.00,null,null);
+local angdif = (sa-ta-180);
+while(angdif>360){angdif-=180;}
+while(angdif< -180){angdif+=360;}
+angdif=abs(angdif);
+local tdist = GetDistance(self.GetOrigin(),target.GetOrigin());
+local tdistz = (target.GetOrigin().z-self.GetOrigin().z);
+EntFireByHandle(tf,"AddOutput","force "+(3000*SPEED_FORWARD).tostring(),0.00,null,null);
+EntFireByHandle(ts,"AddOutput","force "+((3*SPEED_TURNING)*angdif).tostring(),0.00,null,null);
 
-	local npc_model = Entities.FindByNameNearest("npc_model*", self.GetOrigin(), 64);
-	local npc_explosion = Entities.FindByNameNearest("npc_explosion*", self.GetOrigin(), 64);
-	local h=null;
-	if(null!=(h=Entities.FindInSphere(h,npc_model.GetOrigin(),40)))
-	{
-		if(h.GetClassname()=="player"&&h.GetTeam()==3&&h.GetHealth()>0){
-			Stop();
-			EntFireByHandle(npc_model, "SetAnimation","attack",0.0,null,null);
-			EntFireByHandle(npc_explosion, "Explode"," ",1.0,null,null);
-			EntFireByHandle(npc_model, "Kill"," ",1.0,null,null);
-		}
-
+local npc_model = Entities.FindByNameNearest("npc_model*", self.GetOrigin(), 64);
+local npc_explosion = Entities.FindByNameNearest("npc_explosion*", self.GetOrigin(), 64);
+local h=null;
+if(null!=(h=Entities.FindInSphere(h,npc_model.GetOrigin(),40)))
+{
+	if(h.GetClassname()=="player"&&h.GetTeam()==3&&h.GetHealth()>0){
+		Stop();
+		EntFireByHandle(npc_model, "SetAnimation","attack",0.0,null,null);
+		EntFireByHandle(npc_explosion, "Explode"," ",1.8,null,null);
+		EntFireByHandle(npc_model, "FadeAndKill"," ",3.0,null,null);
 	}
+
+}
 }
 function SearchTarget()
 {
-	ttime = 0.00;
-	target = null;
-	local h = null;
-	local candidates = [];
-	while(null!=(h=Entities.FindInSphere(h,self.GetOrigin(),TARGET_DISTANCE)))
+ttime = 0.00;
+target = null;
+local h = null;
+local candidates = [];
+while(null!=(h=Entities.FindInSphere(h,self.GetOrigin(),TARGET_DISTANCE)))
+{
+	//check if target is a valid player + CT team(3) + health above 0 (not dead)
+	if(h.GetClassname()=="player"&&h.GetTeam()==3&&h.GetHealth()>0)
 	{
-		//check if target is a valid player + CT team(3) + health above 0 (not dead)
-		if(h.GetClassname()=="player"&&h.GetTeam()==3&&h.GetHealth()>0)
-		{
-			//check if the target is in sight of the npc (this physbox origin+48 height)
-			if(TraceLine(self.GetOrigin()+Vector(0,0,40),h.GetOrigin()+Vector(0,0,48),self)==1.00)
-				candidates.push(h);//if everything required is OK, add the target to the list of candidates
-		}
+		//check if the target is in sight of the npc (this physbox origin+48 height)
+		if(TraceLine(self.GetOrigin()+Vector(0,0,40),h.GetOrigin()+Vector(0,0,48),self)==1.00)
+			candidates.push(h);//if everything required is OK, add the target to the list of candidates
 	}
-	if(candidates.len()==0)return;
-	target = candidates[RandomInt(0,candidates.len()-1)];
+}
+if(candidates.len()==0)return;
+target = candidates[RandomInt(0,candidates.len()-1)];
 
-	local npc_model = Entities.FindByNameNearest("npc_model*", self.GetOrigin(), 64);
-	EntFireByHandle(npc_model, "SetAnimation","sleeptostand3",0.0,null,null);
-	EntFireByHandle(npc_model, "SetAnimation","run",1.0,null,null);
+local npc_model = Entities.FindByNameNearest("npc_model*", self.GetOrigin(), 64);
+EntFireByHandle(npc_model, "SetAnimation","sleeptostand3",0.0,null,null);
+EntFireByHandle(npc_model, "SetAnimation","run",1.0,null,null);
 }
 function GetTargetYaw(start,target)
 {
-	local yaw = 0.00;
-	local v = Vector(start.x-target.x,start.y-target.y,start.z-target.z);
-	local vl = sqrt(v.x*v.x+v.y*v.y);
-	yaw = 180*acos(v.x/vl)/3.14159;
-	if(v.y<0)
-		yaw=-yaw;
-	return yaw;
+local yaw = 0.00;
+local v = Vector(start.x-target.x,start.y-target.y,start.z-target.z);
+local vl = sqrt(v.x*v.x+v.y*v.y);
+yaw = 180*acos(v.x/vl)/3.14159;
+if(v.y<0)
+	yaw=-yaw;
+return yaw;
 }
 function SetThruster(forward){if(forward)tf=caller;else ts=caller;}
 function GetDistance(v1,v2){return sqrt((v1.x-v2.x)*(v1.x-v2.x)+(v1.y-v2.y)*(v1.y-v2.y)+(v1.z-v2.z)*(v1.z-v2.z));}
 //===============================================================\\
 function spawn_houndeye(){
-    local spawner = Entities.CreateByClassname("env_entity_maker");
-    for(local j=1; j<=13; j++)//遍历target
-    {
-        if(RandomInt(1, 4)<=3)//生成的概率
-        {
-            spawner.__KeyValueFromString("EntityTemplate", "houndeye_template");
-            spawner.SpawnEntityAtNamedEntityOrigin("houndeye_target_"+j);
-        }
-    }
-    EntFireByHandle(spawner, "kill", " ", 0.0, null, null)
+local spawner = Entities.CreateByClassname("env_entity_maker");
+for(local j=1; j<=2; j++)//遍历target
+{
+	if(RandomInt(1, 4)<=3)//生成的概率
+	{
+		spawner.__KeyValueFromString("EntityTemplate", "houndeye_template");
+		spawner.SpawnEntityAtNamedEntityOrigin("houndeye_target_"+j);
+	}
+}
+EntFireByHandle(spawner, "kill", " ", 0.0, null, null)
 }

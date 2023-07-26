@@ -1,16 +1,18 @@
 SCRIPT_OWNER <- "7ychu5";
 SCRIPT_MAP <- "ze_obj_filth";
 SCRIPT_TIME <- "2023年3月6日00:31:46";
-SCRIPT_VERSION <- "1.0";
+SCRIPT_VERSION <- "1.1";
+
+IncludeScript("vs_library");
 
 self.PrecacheScriptSound("items/ammo_pickup.wav");
 count_max <- 20;
 count <- count_max;
 function use_ammo() {
-    if(activator.GetName() != "ammo_user")
+    if(activator.GetName() != "ammo_user" && activator.GetTeam() == 3)
     {
         EntFireByHandle(activator, "AddOutput", "targetname ammo_user", 0.0, null, null);
-        EntFireByHandle(activator, "AddOutput", "targetname ", 20.0, null, null);
+        EntFireByHandle(activator, "AddOutput", "targetname ", 60.0, null, null);
         if(count>1)
         {
             count--;
@@ -38,14 +40,14 @@ function use_ammo() {
                     ent.GetClassname() != "weapon_spanner" &&
                     ent.GetClassname() != "weapon_tagrenade" &&
                     ent.GetClassname() != "weapon_taser" &&
-	    ent.GetClassname() != "weapon_awp" &&
-	    ent.GetClassname() != "weapon_aug" &&
-	    ent.GetClassname() != "weapon_sg553" &&
-	    ent.GetClassname() != "weapon_mag7" &&
-	    ent.GetClassname() != "weapon_sawedoff" &&
-	    ent.GetClassname() != "weapon_deagle" &&
-	    ent.GetClassname() != "weapon_revolver" &&
-	    ent.GetClassname() != "weapon_g3sg1" &&
+                    ent.GetClassname() != "weapon_awp" &&
+                    ent.GetClassname() != "weapon_aug" &&
+                    ent.GetClassname() != "weapon_sg553" &&
+                    ent.GetClassname() != "weapon_mag7" &&
+                    ent.GetClassname() != "weapon_sawedoff" &&
+                    ent.GetClassname() != "weapon_deagle" &&
+                    ent.GetClassname() != "weapon_revolver" &&
+                    ent.GetClassname() != "weapon_g3sg1" &&
                     ent.GetClassname() != "weapon_bumpmine")
                     if(ent.GetMoveParent() == activator) EntFireByHandle(ent,"SetAmmoAmount","150",0.00,null,null);
             }
@@ -80,14 +82,14 @@ function use_ammo() {
                     ent.GetClassname() != "weapon_spanner" &&
                     ent.GetClassname() != "weapon_tagrenade" &&
                     ent.GetClassname() != "weapon_taser" &&
-	    ent.GetClassname() != "weapon_awp" &&
-	    ent.GetClassname() != "weapon_aug" &&
-	    ent.GetClassname() != "weapon_sg553" &&
-	    ent.GetClassname() != "weapon_mag7" &&
-	    ent.GetClassname() != "weapon_sawedoff" &&
-	    ent.GetClassname() != "weapon_deagle" &&
-	    ent.GetClassname() != "weapon_revolver" &&
-	    ent.GetClassname() != "weapon_g3sg1" &&
+                    ent.GetClassname() != "weapon_awp" &&
+                    ent.GetClassname() != "weapon_aug" &&
+                    ent.GetClassname() != "weapon_sg553" &&
+                    ent.GetClassname() != "weapon_mag7" &&
+                    ent.GetClassname() != "weapon_sawedoff" &&
+                    ent.GetClassname() != "weapon_deagle" &&
+                    ent.GetClassname() != "weapon_revolver" &&
+                    ent.GetClassname() != "weapon_g3sg1" &&
                     ent.GetClassname() != "weapon_bumpmine")
                     if(ent.GetMoveParent() == activator) EntFireByHandle(ent,"SetAmmoAmount","150",0.00,null,null);
             }
@@ -101,6 +103,18 @@ function use_ammo() {
     }
     else{
         local hp = activator.GetHealth();
-        EntFireByHandle(activator, "SetHealth", (hp-=2).tostring(), 1.0, null, null);
+        EntFireByHandle(activator, "SetHealth", (hp-=5).tostring(), 1.0, null, null);
     }
 }
+
+VS.ListenToGameEvent( "player_hurt", function( event )
+{
+    local killer = VS.GetPlayerByUserid(event.attacker);
+    if(killer == null) return;
+    if(killer.GetName() == "ammo_user")
+    {
+        local victim = VS.GetPlayerByUserid( event.userid );
+        EntFireByHandle(victim, "IgniteLifetime", "5", 0.0, null, null);
+    }
+
+}, "IgniteT", 0 );

@@ -101,7 +101,7 @@ function mapper_info(userid) {
 		}
 		break;
 	}
-	//ScriptPrintMessageCenterAll("<html><img src=\"https://steamuserimages-a.akamaihd.net/ugc/2001321225474498283/2FB6FA65DC8ED3A6224DF943A18F64326C88D1E2/\"/></html>\n");
+	//ScriptPrintMessageCenterAll("<html><img src=\'https://i0.hdslb.com/bfs/archive/f505d68f83241e8ea35e7fa1bb34315cf4b85a13.jpg\'/></html>\n");
 }
 
 function hint_job() {

@@ -70,9 +70,6 @@ function Confirm_puzzle_lamp()
 //////////////////////////
 ///////puzzle_calc////////
 //////////////////////////
-// self.PrecacheScriptSound("hichatu/gol.mp3"); //Precache gol sound without using an ambient_generic
-//Check chat data from logic_eventlistener
-//Format: <output name> <targetname>,<inputname>,<parameter>,<delay>,<max times to fire (-1 == infinite)>
 calc_a <- 0;
 calc_b <- 0;
 calc_c <- 0;
@@ -93,17 +90,39 @@ function generate_puzzle_math() {
 }
 
 //////////////////////////
-/////puzzle_sequence//////
+/////puzzle_naipi//////
 //////////////////////////
-
-
-
-
-
+// ::puzzle_naipi_sum <- null;
+// ::puzzle_naipi_sum.resize(4);
+toggle <- false;
+function puzzle_naipi_change(handle,tog) {
+    local tog = toggle;
+    if(tog == false){
+        tog = !tog;
+        EntFire(handle.GetName()+"_1", "Alpha", "0", 0.0, null);
+        if(handle.GetName().slice(-1).tofloat()<=3){
+            EntFire("puzzle_naipi_calc", "Add", "1", 0.0,null);
+        }
+        else{
+            EntFire("puzzle_naipi_calc", "Subtract", "1", 0.0,null);
+        }
+    }
+    else{
+        tog = !tog;
+        EntFire(handle.GetName()+"_1", "Alpha", "255", 0.0, null);
+        if(handle.GetName().slice(-1).tofloat()<=3){
+            EntFire("puzzle_naipi_calc", "Subtract", "1", 0.0,null);
+        }
+        else{
+            EntFire("puzzle_naipi_calc", "Add", "1", 0.0,null);
+        }
+    }
+    toggle = tog;
+}
 
 
 //////////////////////////
-///////puzzle_tube////////
+///////puzzle_tube(WIP)////////
 //////////////////////////
 puzzle_tube <- [];
 function generate_puzzle_tube(){
@@ -159,31 +178,4 @@ function rotate_puzzle_tube(){
 }
 function select_puzzle_tube(){
 
-}
-
-
-//////////////////////////
-/////////end_time/////////
-//////////////////////////
-function enter_showdown(activator){
-    activator.__KeyValueFromString("targetname", "winner");
-    EntFire("trigger_showdown_door", "Toggle", " ", 0, 0);
-    EntFire("logic_script", "RunScriptCode", "SayGoodBye()", 5, 0);
-}
-function out_showdown(activator){
-    activator.__KeyValueFromString("targetname", " ");
-}
-function SayGoodBye() {
-    local h = null;
-    while(null!=(h=Entities.FindByClassname(h,"player")))//如果要测试bot请把player换成cs_bot
-	{
-		if(h.GetName() != "winner" && h.GetHealth()>0)
-		{
-            EntFireByHandle(h, "SetHealth", "-1", 0.0, null, null);
-            //h.SetHealth(0);//这玩意儿弄不死人？怪事
-			//h.SetTeam(2);//不知道为啥没屌用，但是能直接把人干死，可以在服务器里试试
-		}
-	}
-    local command = Entities.CreateByClassname("point_servercommand");
-    EntFireByHandle(command, "Command", "mp_restartgame 5", 0, null, null);
 }

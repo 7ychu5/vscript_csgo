@@ -840,7 +840,7 @@ function SayGoodBye() {
 	{
 		local ent_origin_z = p.GetOrigin().z;
         if(ent_origin_z < 2086){
-        EntFireByHandle(p, "SetHealth", "-1", 0.0, null, null);
+            EntFireByHandle(p, "SetHealth", "-1", 0.0, null, null);
         }
 	}
     local target_candidates = [];
@@ -853,5 +853,10 @@ function SayGoodBye() {
 	for(local a = 0; a < target_candidates.len(); a++)
     {
         EntFireByHandle(target_candidates[a], "SetHealth", "-1", 0.0, null, null);
+        EntFireByHandle(target_candidates[a], "SetHealth", "-1", 1.0, null, null);
+        EntFireByHandle(target_candidates[a], "SetHealth", "-1", 2.0, null, null);
+        EntFireByHandle(target_candidates[a], "SetHealth", "-1", 3.0, null, null);
+        EntFireByHandle(target_candidates[a], "SetHealth", "-1", 4.0, null, null);
+        EntFireByHandle(target_candidates[a], "SetHealth", "-1", 5.0, null, null);
     }
 }
