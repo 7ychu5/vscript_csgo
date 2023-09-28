@@ -3,22 +3,21 @@ SCRIPT_MAP <- "UNKNOWN";
 SCRIPT_TIME <- "2023年7月9日19:57:09";
 
 /*
-另一个是锁定类神器，
 锁定2000hammer单位半径内的一名ct玩家，
 然后在他头上生成一个提示特效代表他被锁定了，
 5秒后武器会射向玩家一共造成100伤害和3秒定身
 */
 
 //////////////////参数////////////////////
-Cooldown <- 30;                         //冷却时间
+Cooldown <- 50;                         //冷却时间
 lock_radius <- 2000                     //锁定半径
 
-speed <- 0.0;                           //发射初速度
-speed_acceleration <- 0.1;              //发射加速度
+speed <- 1.0;                           //发射初速度
+speed_acceleration <- 0.2;              //发射加速度
 speed_max <- 15.0;                      //最大速度
 
-Damage <- 1000;                          //伤害
-Damage_range <- 256;                     //伤害半径
+Damage <- 120;                          //伤害
+Damage_range <- 512;                     //伤害半径
 
 bar_cooldown <- "255 0 255"             //冷却条颜色
 
@@ -54,7 +53,7 @@ function UseGaebolg() {
         local Cooldown_tick = Cooldown;
         for(local j=0;j<Cooldown;j+=0.1)
         {
-            EntFireByHandle(text, "SetText", "准备长矛： "+format("%.1f",Cooldown_tick)+" 秒", j, null, null);
+            EntFireByHandle(text, "SetText", "死棘之枪冷却： "+format("%.1f",Cooldown_tick)+" 秒", j, null, null);
             EntFireByHandle(text, "Display", "", j, Gaebolg_user, null);
             Cooldown_tick-=0.1;
         }
@@ -109,13 +108,13 @@ function Tick()
         EntFireByHandle(speedmod, "ModifySpeed", "0.00", 0.00, target, null);
         EntFireByHandle(speedmod, "ModifySpeed", "1.00", 3.00, target, null);
         target.EmitSound(Damage_sound);
-        speedmod.Destroy();
+        EntFireByHandle(speedmod, "kill", "", 3.10, null, null);
 
         local boom = Entities.CreateByClassname("Env_explosion");
         boom.SetOrigin(target.GetOrigin());
         boom.__KeyValueFromInt("iMagnitude", Damage);
         boom.__KeyValueFromInt("iRadiusOverride", Damage_range);
-        EntFireByHandle(boom, "Explode", "", 0.0, Gaebolg_user, Gaebolg_user);
+        EntFireByHandle(boom, "Explode", "", 0.0, null, null);
 	}
 	EntFireByHandle(self, "RunScriptCode", " Tick() ", 0.01, null, null);
 }
@@ -132,9 +131,9 @@ function SearchTarget()
 		}
 		local p = null;
 		local pa = [];
-		while(null != (p = Entities.FindByClassnameWithin(p, "cs_bot", self.GetOrigin(), lock_radius)))
+		while(null != (p = Entities.FindByClassnameWithin(p, "player", self.GetOrigin(), lock_radius)))
 		{
-			if(p.GetTeam() == 2)
+			if(p.GetTeam() == 3)
 			{
 				//local ppos = p.GetOrigin();ppos.z+=48;
 				//if(TraceLine(self.GetOrigin(),ppos,self) == 1.0) //直视判定，既然必中，何必在意？

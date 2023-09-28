@@ -7,16 +7,17 @@ SCRIPT_TIME <- "2023年7月8日12:12:58";
 //////////////////参数////////////////////
 Cooldown <- 5;                  //冷却时间
 
-Energy_count <- 0;              //能量从此计数
+Energy_count <- 500;              //能量从此计数
 Energy_max <- 100;              //爆能阈值
 
-Damage_normal <- 10;            //普攻伤害
-Damage_extreme <- 1000;         //爆能伤害
+Damage_normal <- 1000;            //普攻伤害
+Damage_extreme <- 20000;         //爆能伤害
+Damage_radius <- 384;            //伤害半径
 
 bar_energy <- "0 255 255"       //能量条颜色
 bar_cooldown <- "255 0 255"     //冷却条颜色
 
-Damage_sound <- "player/damage1.wav"//普攻命中声
+Damage_sound <- "zdy/bow_shot.mp3"//普攻命中声
 
 //////////////////////////////////////////
 
@@ -66,7 +67,7 @@ function UseBow() {
             EntFire("item_bow_particle", "Start", "", 0.0, null);//爆能射箭外观效果
         }
 
-        maker.__KeyValueFromString("PostSpawnSpeed","20000");
+        maker.__KeyValueFromString("PostSpawnSpeed","200000");
         maker.__KeyValueFromString("PostSpawnDirection","0 "+(Bow_prop.GetAngles().y+90.0)+" 0");
 
         maker.SpawnEntityAtEntityOrigin(Bow_prop);
@@ -78,7 +79,7 @@ function UseBow() {
         local Cooldown_tick = Cooldown;
         for(local j=0;j<Cooldown;j+=0.1)
         {
-            EntFireByHandle(text, "SetText", "张弓搭箭： "+Cooldown_tick+" 秒", j, null, null);
+            EntFireByHandle(text, "SetText", "箭矢准备中： "+format("%.1f",Cooldown_tick)+" 秒", j, null, null);
             EntFireByHandle(text, "Display", "", j, Bow_user, null);
             Cooldown_tick-=0.1;
         }
@@ -94,24 +95,41 @@ function TouchEnemy() {
     if(activator.GetTeam() != 2 || activator.GetHealth() <=0 || !activator.IsValid()) return;
     if(Energy_count>=Energy_max)
     {
-        local boom = Entities.CreateByClassname("Env_explosion");
-        boom.SetOrigin(activator.GetOrigin());
-        boom.__KeyValueFromString("iMagnitude", "1000");
-        boom.__KeyValueFromString("iRadiusOverride", "256");
-        EntFireByHandle(boom, "Explode", "", 0.0, Bow_user, null);
+        local p;
+        while(null != (p = Entities.FindByClassnameWithin(p, "cs_bot", caller.GetOrigin(), Damage_radius)))
+        {
+            if(p.GetTeam() == 2)
+            {
+                local hp = p.GetHealth();
+                if(hp<=Damage_extreme){
+                    EntFireByHandle(p,"SetHealth","-1",0.0,null,null)
+                }
+                else{
+                    p.SetHealth(hp-Damage_extreme);
+                }
+            }
+        }
         //爆能
     }
 
-    local hp = activator.GetHealth();if(hp>Damage_normal) activator.SetHealth(hp-Damage_normal);
+    local hp = activator.GetHealth();
+    if(hp<=Damage_normal){
+        EntFireByHandle(activator,"SetHealth","-1",0.0,null,null)
+    }
+    else{
+        activator.SetHealth(hp-Damage_normal);
+    }
+
 
     Energy_count += 5;
     printl(Energy_count);
     if(Energy_count>=Energy_max)//判定放最后判定弓箭是否展示爆能特效
     {
         EntFire("item_bow_particle", "Start", "", 0.0, null);
-        printl("弓箭进入爆能状态")//判定弓箭是否展示爆能特效
+        EntFire("item_bow_particle", "Stop", "", 3.0, null);
+        printl("calablog准备就绪")//判定弓箭是否展示爆能特效
     }
-    activator.EmitSound("player/damage1.wav");
+    activator.EmitSound("zdy/killshot_02.mp3");
     EntFireByHandle(caller, "FireUser1", "", 0.0, null, null);//如果希望弓箭带有穿透效果请删除此行。BUG：可能会射一半突然完成充能引发爆炸
 }
 

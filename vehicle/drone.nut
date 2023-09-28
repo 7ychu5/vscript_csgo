@@ -40,14 +40,14 @@ function tick() {
         {
             EntFire("drone_thruster_up", "Deactivate", "", 0.0, null);
             //EntFire("drone_thruster_up", "AddOutput", "angles -90 0 0", 0.0, null);
-            EntFire("drone_thruster_up", "AddOutput", "force 1000", 0.0, null);
+            EntFire("drone_thruster_up", "AddOutput", "force 810", 0.0, null);
             EntFire("drone_thruster_up", "Activate", "", 0.0, null);
         }
         else if(target_origin.z+180<self.GetOrigin().z)
         {
             EntFire("drone_thruster_up", "Deactivate", "", 0.0, null);
             //EntFire("drone_thruster_up", "AddOutput", "angles 90 0 0", 0.0, null);
-            EntFire("drone_thruster_up", "AddOutput", "force 500", 0.0, null);
+            EntFire("drone_thruster_up", "AddOutput", "force 780", 0.0, null);
             EntFire("drone_thruster_up", "Activate", "", 0.0, null);
         }
 
@@ -64,12 +64,12 @@ function tick() {
         while(angdif< -180){angdif+=360;}
         angdif=abs(angdif);
 
-        EntFire("drone_thruster_dir", "AddOutput", "force "+(9*angdif).tostring(), 0.0, null);
+        EntFire("drone_thruster_dir", "AddOutput", "force "+(1*angdif).tostring(), 0.0, null);
         EntFire("drone_thruster_forward", "Activate", "", 0.02, null);
         EntFire("drone_thruster_dir", "Activate", "", 0.02, null);
 
         //循环
-        EntFireByHandle(self, "RunScriptCode", "tick()", 0.1, null);
+        EntFireByHandle(self, "RunScriptCode", "tick()", 0.02, null);
     }
     else return;
 }
